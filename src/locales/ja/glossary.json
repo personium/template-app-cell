@@ -1,0 +1,16 @@
+{
+    "title": "最小限アプリ",
+    "sessionExpiredDialog": {
+        "title": "セッション期限切れ",
+        "action": "$t(glossary:title)を終了します。",
+        "btnOk": "OK"
+    },
+    "irrecoverableErrorDialog": {
+        "title": "$t(glossary:title)を終了します ..."
+    },
+    "msg": {
+        "info": {
+            "description": "{{name}}さん、こにちは。<br>ご自由にこのアプリを修正してください。"
+        }
+    }
+}
