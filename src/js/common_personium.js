@@ -160,7 +160,7 @@ Common.getOtherAllowedCells = function() {
             })
 
             for (var i in results) {
-                var url = results[i].Url;
+                var url = Common.changeLocalUnitToUnitUrl(results[i].Url);
                 Common.dispOtherAllowedCells(url);
             }
         }
