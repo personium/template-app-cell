@@ -18,7 +18,7 @@ You also need to mention that you want an app cell, too.
                   "schema": "https://demo.personium.io/***/"
                 }
 
-        - After:  
+        - After (example):  
 
                 {
                   "bar_version": "1",
@@ -35,9 +35,7 @@ You also need to mention that you want an app cell, too.
                   "personal": {
                      "web": "https://***/***/__/src/app.html",
                      "android": "***:",
-                     "ios": "***:",
-                     "appTokenId": "tokenAcc",
-                     "appTokenPw": "personiumtoken"
+                     "ios": "***:"
                   }
                 }
 
@@ -47,9 +45,7 @@ You also need to mention that you want an app cell, too.
                   "personal": {
                      "web": "https://demo.personium.io/app-minimal/__/src/app.html",
                      "android": "MinimalApp:",
-                     "ios": "MinimalApp:",
-                     "appTokenId": "tokenAcc",
-                     "appTokenPw": "personiumtoken"
+                     "ios": "MinimalApp:"
                   }
                 }
 

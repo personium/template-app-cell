@@ -5,8 +5,9 @@ All you need to do is import it to your project and start filling in the missing
 
 # Folder structure  
 
-    Z:.
+    template-app-cell
     │  app-minimal.bar
+    │  folder.txt
     │  launch.json
     │  LICENSE
     │  profile.json
@@ -17,31 +18,47 @@ All you need to do is import it to your project and start filling in the missing
     │          00_manifest.json
     │          90_rootprops.xml
     │          
+    ├─doc
+    │      BarInstall.png
+    │      BarInstall_Disabled.png
+    │      BarInstall_Enabled.png
+    │      CreateBox.png
+    │      Customizations.md
+    │      HowToDeploy.md
+    │      ImportBox.png
+    │      Menu_ApplicationManagement.png
+    │      MinimalApp_MainBox.png
+    │      Tips.md
+    │      
     ├─icon
     │      icon.png
     │      
     └─src
-        │  app.html
-        │  
-        ├─css
-        │      common.css
-        │      
-        ├─img
-        │      github.png
-        │      
-        ├─js
-        │      app.js
-        │      common.js
-        │      common_personium.js
-        │      
-        └─locales
-            ├─en
-            │      common.json
-            │      glossary.json
+        └─html
+            │  app.html
+            │  
+            ├─css
+            │      common.css
             │      
-            └─ja
-                    common.json
-                    glossary.json
+            ├─Engine
+            │      getAppAuthToken.js
+            │      
+            ├─img
+            │      github.png
+            │      
+            ├─js
+            │      app.js
+            │      common.js
+            │      common_personium.js
+            │      
+            └─locales
+                ├─en
+                │      common.json
+                │      glossary.json
+                │      
+                └─ja
+                        common.json
+                        glossary.json
 
 # How to deploy  
 Take a look at the guide on [How to deploy](doc/HowToDeploy.md) the minimal app.  

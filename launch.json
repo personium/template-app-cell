@@ -1,9 +1,7 @@
 {
   "personal": {
-     "web": "https://demo.personium.io/app-minimal/__/html/app.html",
+     "web": "https://***/***/__/html/app.html",
      "android": "MinimalApp:",
-     "ios": "MinimalApp:",
-     "appTokenId": "tokenAcc",
-     "appTokenPw": "personiumtoken"
+     "ios": "MinimalApp:"
   }
 }
