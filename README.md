@@ -7,7 +7,6 @@ All you need to do is import it to your project and start filling in the missing
 
     template-app-cell
     │  app-minimal.bar
-    │  folder.txt
     │  launch.json
     │  LICENSE
     │  profile.json
