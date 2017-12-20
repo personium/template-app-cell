@@ -48,6 +48,10 @@ You also need to mention that you want an app cell, too.
                      "ios": "MinimalApp:"
                   }
                 }
+    1. getAppAuthToken.js
+    Engine script that get App Authentication Token.  
+    Replace "*** with proper information.  
+    App developer should set the Engine Service to all exec (not all read) to avoid showing the ID/Password in this file.  
 
     1. app.js  
     Internal APIs in common.js or common_personium.js refers to the cell URL to perform all sorts of operations.  
@@ -63,7 +67,9 @@ You also need to mention that you want an app cell, too.
 We recommend 7-zip for Windows environment.    
 Example: app-minimal.bar  
 1. Upload files (see the diagram below) to the app cell's main box using the CellManager.  
+Unforntunately, the Cell Manager currently only support uploading one file at a time.  
 ![Main box of MinimalApp](MinimalApp_MainBox.png)  
+1. 
 
 ## How to Install the app  
 You can install by either of the following ways.  
