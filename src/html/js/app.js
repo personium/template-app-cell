@@ -1,5 +1,9 @@
 const APP_URL = "https://***/***/";
 
+getEngineEndPoint = function() {
+    return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
+};
+
 getNamesapces = function() {
     return ['common', 'glossary'];
 };
