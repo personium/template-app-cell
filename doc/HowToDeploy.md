@@ -1,11 +1,15 @@
 # How to deploy  
 We use "https://demo.personium.io/app-minimal/" in this example, but make sure you use your own Personium Cell URL.  
 
+## Before deploying the App  
 1. Join our community through [Slack](https://docs.google.com/forms/d/e/1FAIpQLSeup_VHnO09yB0r-pfQuQPSZkxZrVsisiFlSuNf0MPnUFKKGw/viewform?c=0&w=1)  
 1. After your slack account is activated, please write a simple message in "demo-cell-request" channel so that we will create a new cell for you.  
 You also need to mention that you want an app cell, too.  
 1. Once you receive your newly created app cell, please change the password of the admin account.  
-1. Then, specify the cell URL for the following files:  
+
+## Deploying the files  
+1. Use Cell Manager to access your Cell.  
+1. Specify the cell URL for the following files:  
     1. 00_manifest.json  
     This information is used when installing your app's box.  
     [DefaultPath is not implemented yet](https://github.com/personium/personium-core/issues/51), therefore, no need to change it.
@@ -33,7 +37,7 @@ You also need to mention that you want an app cell, too.
 
                 {
                   "personal": {
-                     "web": "https://***/***/__/src/app.html",
+                     "web": "https://***/***/__/html/app.html",
                      "android": "***:",
                      "ios": "***:"
                   }
@@ -43,15 +47,11 @@ You also need to mention that you want an app cell, too.
 
                 {
                   "personal": {
-                     "web": "https://demo.personium.io/app-minimal/__/src/app.html",
+                     "web": "https://demo.personium.io/app-minimal/__/html/app.html",
                      "android": "MinimalApp:",
                      "ios": "MinimalApp:"
                   }
                 }
-    1. getAppAuthToken.js
-    Engine script that get App Authentication Token.  
-    Replace "*** with proper information.  
-    App developer should set the Engine Service to all exec (not all read) to avoid showing the ID/Password in this file.  
 
     1. app.js  
     Internal APIs in common.js or common_personium.js refers to the cell URL to perform all sorts of operations.  
@@ -66,25 +66,76 @@ You also need to mention that you want an app cell, too.
 1. Create a bar file (zip format).
 We recommend 7-zip for Windows environment.    
 Example: app-minimal.bar  
-1. Upload files (see the diagram below) to the app cell's main box using the CellManager.  
+1. Upload files (see the diagrams below) to the app cell's main box using the CellManager.  
 Unforntunately, the Cell Manager currently only support uploading one file at a time.  
-![Main box of MinimalApp](MinimalApp_MainBox.png)  
-1. 
+    1. Main Box  
+    ![Main box of MinimalApp](MinimalApp_MainBox.png)  
+    1. Set ACL to all-read for the following files.  
+    Leave "html" folder alone (no ACL settings).
+        - app-minimal.bar  
+        - launch.json  
+        - profile.json  
+    1. html folder  
+    Notice that Engine folder must be a Service (see details in the next section).  
+    ![html folder of MinimalApp](MinimalApp_html_folder.png)  
+    1. Set ACL to all-read for the following files/folders.  
+    Leave "Engine" Service alone (no ACL settings).  
+        - css  
+        - img  
+        - js  
+        - locales  
+        - app.html  
 
-## How to Install the app  
-You can install by either of the following ways.  
+## Deploying the Engine Script  
+1. Perform the following procedures to deploy the Engine Script.  
+    1. Fill in proper information in "getAppAuthToken.js".  
+    This is the Engine Script that gets App Authentication Token.  
+    Replace "*** with proper information.  
+    App developer should set the Engine Service to all exec (not all read) to avoid showing the ID/Password in this file.  
+        - App's URL info (Before)  
 
-1. Access a Person Cell's HomeApp: 
-    1. Access the Application Management menu  
-    ![](Menu_ApplicationManagement.png)  
-    1. Tap Bar Install  
-    ![](BarInstall.png) 
-    1. Activate the feature  
-    ![](BarInstall_Disabled.png)  
-    1. Fill in the information  
-    ![](BarInstall_Enabled.png)   
-1. Access a Person Cell's Cell Manager:  
-    1. Hover over the Create Box menu and click Import Box.  
-    ![](CreateBox.png)  
-    1. Fill in the information.  
-    ![](ImportBox.png)  
+                    var rootUrl = "***";
+                    var appCellName = "***";
+
+        - App's URL info (After)  
+
+                    var rootUrl = "https://demo.personium.io";
+                    var appCellName = "app-minimal";
+
+        - App's authentication info (Before)  
+
+                    "userId": "***",
+                    "password": "***"
+
+        - App's authentication info (After)  
+        Sample account ID is "john" and password is "doe".  
+
+                    "userId": "john",
+                    "password": "doe" 
+
+    1. Create a Service (unitService) under the "html" folder.  
+    ![Create a Service](CreateServiceDialog.png)  
+    1. Upload the following file to the newly created Service's __src folder.  
+        - src/html/Engine/getAppAuthToken.js    
+        ![Service folder](ServiceFolderFileUpload.png)  
+    1. Configure the access permission for the Service.  
+        1. Move back up inside the main box.  
+        1. Select (check mark) the Service.
+        1. Click the ACL Settings edit icon (pencil) and configure the permission.  
+        Assign Exec privilege to the "all (anyone)" principal.  
+        1. Click the Save button.  
+    1. Configure the Service.  
+        1. Select (check mark) the Service.  
+        1. Click Confiugre located on the upper left of the table.  
+        1. Assign the Service path (getAppAuthToken) to the JavaScript file (getAppAuthToken.js).  
+        ![Service Configuration Dialog](ServiceConfigurationDialog01.png)  
+        1. Click the Register button.  
+        The following is the expected result.  
+        ![Service path registered](ServiceConfigurationDialog02.png)  
+        1. Close the dialog  
+
+    1. Verify the configuration.  
+        1. Move inside the Engine's "__src" folder
+        1. Confirm that the Service path (getAppAuthToken) is assigned to the file  (getAppAuthToken.js).  
+        ![After Configuration](ServiceFolderAfterConfiguration.png)
+
