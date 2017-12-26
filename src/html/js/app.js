@@ -20,4 +20,7 @@ displayMyDisplayName = function(extUrl, dispName) {
         .localize({
             "name": dispName
         });
+
+    $('body > div.mySpinner').hide();
+    $('body > div.myHiddenDiv').show();
 };
