@@ -5,12 +5,11 @@ All you need to do is import it to your project and start filling in the missing
 
 # Folder structure  
 
-    template-app-cell
     │  app-minimal.bar
     │  launch.json
-    │  LICENSE
     │  profile.json
-    │  README.md
+    │  relations.json
+    │  roles.json
     │  
     ├─bar
     │  └─00_meta
@@ -20,8 +19,14 @@ All you need to do is import it to your project and start filling in the missing
     ├─doc
     │      
     ├─icon
-    │      icon.png
     │      
+    ├─locales
+    │  ├─en
+    │  │      profile.json
+    │  │      
+    │  └─ja
+    │          profile.json
+    │          
     └─src
         └─html
             │  app.html

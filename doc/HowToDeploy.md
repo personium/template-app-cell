@@ -66,15 +66,20 @@ You also need to mention that you want an app cell, too.
 1. Create a bar file (zip format).
 We recommend 7-zip for Windows environment.    
 Example: app-minimal.bar  
-1. Upload files (see the diagrams below) to the app cell's main box using the CellManager.  
+1. Upload files to the app cell's main box using the CellManager.  
 Unforntunately, the Cell Manager currently only support uploading one file at a time.  
-    1. Main Box  
-    ![Main box of MinimalApp](MinimalApp_MainBox.png)  
-    1. Set ACL to all-read for the following files.  
-    Leave "html" folder alone (no ACL settings).
+    1. Upload the following files.  
         - app-minimal.bar  
         - launch.json  
         - profile.json  
+        - html folder  
+    1. Main Box  
+    ![Main box of MinimalApp](MinimalApp_MainBox.png)  
+    1. Set ACL to all-read for the following files.  
+    Other pre-existed files' permission are already set.  
+    Leave "html" folder alone (no ACL settings).
+        - app-minimal.bar  
+        - launch.json  
     1. html folder  
     Notice that Engine folder must be a Service (see details in the next section).  
     ![html folder of MinimalApp](MinimalApp_html_folder.png)  
