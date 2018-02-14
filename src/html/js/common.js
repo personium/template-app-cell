@@ -78,7 +78,7 @@ $(document).ready(function() {
                 let token = Common.getToken();
                 Common.getBoxUrlAPI(cellUrl, token)
                     .done(function(data, textStatus, request) {
-                        let boxUrl = request.getResponseHeader("Location");
+                        let boxUrl = Common.getBoxUrlFromResponseHeader(request);
                         console.log(boxUrl);
                         Common.setInfo(boxUrl);
                         // define your own additionalCallback for each App/screen
@@ -150,6 +150,15 @@ Common.getBoxUrlAPI = function(cellUrl, token) {
             'Accept':'application/json'
         }
     });
+};
+
+/*
+ * Currently the REST API does not support CORS.
+ * Therefore, for CORS case, the default Box name is used.
+ */
+Common.getBoxUrlFromResponseHeader = function(request) {
+    let boxUrl = request.getResponseHeader("Location") || (Common.getCellUrl() + APP_BOX_NAME);
+    return boxUrl;
 };
 
 Common.setInfo = function(url) {
@@ -358,7 +367,7 @@ Common.closeTab = function() {
 Common.refreshToken = function(callback) {
     let cellUrl = Common.getCellUrl();
     Common.getAppAuthToken(cellUrl).done(function(appToken) {
-        Common.getSchemaAuthToken(appToken.access_token, cellUrl).done(function(appCellToken) {
+        Common.getProtectedBoxAccessToken(appToken.access_token, cellUrl).done(function(appCellToken) {
             // update sessionStorage
             Common.updateSessionStorage(appCellToken);
             if ((typeof callback !== "undefined") && $.isFunction(callback)) {
@@ -386,12 +395,12 @@ Common.getAppAuthToken = function(cellUrl) {
 };
 
 /*
- * Get Schema Authentication Token
+ * Get access token for protected box(es) which is accessible by the App.
  * client_id belongs to a App's cell URL
  * Example: MyBoard is "https://demo.personium.io/app-myboard/"
  *          Calorie Smile is "https://demo.personium.io/hn-app-genki/"
  */
-Common.getSchemaAuthToken = function(appToken, cellUrl) {
+Common.getProtectedBoxAccessToken = function(appToken, cellUrl) {
   return $.ajax({
                 type: "POST",
                 url: cellUrl + '__token',
@@ -416,11 +425,11 @@ Common.updateSessionStorage = function(appCellToken) {
 };
 
 Common.perpareToCellInfo = function(cellUrl, tcat, aaat, callback) {
-    Common.getToCellSchemaAuthToken(cellUrl, tcat, aaat).done(function(appCellToken) {
+    Common.getProtectedBoxAccessToken4ExtCell(cellUrl, tcat, aaat).done(function(appCellToken) {
         Common.setToCellToken(appCellToken.access_token);
         Common.getBoxUrlAPI(cellUrl, appCellToken.access_token)
             .done(function(data, textStatus, request) {
-                let boxUrl = request.getResponseHeader("Location");
+                let boxUrl = Common.getBoxUrlFromResponseHeader(request);
                 Common.setToCellBoxUrl(boxUrl + "/");
                 // callback
                 if ((typeof callback !== "undefined") && $.isFunction(callback)) {
@@ -437,7 +446,7 @@ Common.perpareToCellInfo = function(cellUrl, tcat, aaat, callback) {
     });
 };
 
-Common.getToCellSchemaAuthToken = function(cellUrl, tcat, aaat) {
+Common.getProtectedBoxAccessToken4ExtCell = function(cellUrl, tcat, aaat) {
     return $.ajax({
         type: "POST",
         url: cellUrl + '__token',

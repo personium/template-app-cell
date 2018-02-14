@@ -215,14 +215,16 @@ Common.prepareExtCellForApp = function(extUrl, dispName) {
 };
 
 /*
- * Get Schema Authenitication Token of the external Cell and get its Box URL.
- * When done, execute callback (add external Cell to proper list).
+ * Perform the followings for an external Cell:
+ * 1. Get access token for protected box(es) which is accessible by the App.
+ * 2. Get Box URL.
+ * 3. Execute callback (add external Cell to proper list).
  */
 Common.perpareExtCellInfo = function(cellUrl, tcat, aaat, callback, dispName) {
-    Common.getToCellSchemaAuthToken(cellUrl, tcat, aaat).done(function(appCellToken) {
+    Common.getProtectedBoxAccessToken4ExtCell(cellUrl, tcat, aaat).done(function(appCellToken) {
         Common.getBoxUrlAPI(cellUrl, appCellToken.access_token)
             .done(function(data, textStatus, request) {
-                let boxUrl = request.getResponseHeader("Location") + "/";
+                let boxUrl = Common.getBoxUrlFromResponseHeader(request) + '/';
                 console.log(boxUrl);
 
                 if ((typeof callback !== "undefined") && $.isFunction(callback)) {
@@ -296,7 +298,12 @@ Common.appendRequestCells = function(extUrl, dispName) {
     $("#bSendAllowed").prop("disabled", false);
 };
 
-Common.sendMessageAPI = function(uuid, extCell, type, title, body, reqRel, reqRelTar) {
+/*
+ * When the following conditions are satisfied, there is no need to include App URL when specifying the role/relation name.
+ * 1. BoxBound must set to true
+ * 2. Authorization token must be App authenticated token
+ */
+Common.sendMessageAPI = function(uuid, extCell, type, title, body, reqType, reqRel, reqRelTar) {
     var data = {};
     data.BoxBound = true;
     data.InReplyTo = uuid;
@@ -306,11 +313,13 @@ Common.sendMessageAPI = function(uuid, extCell, type, title, body, reqRel, reqRe
     data.Title = title;
     data.Body = body;
     data.Priority = 3;
-    if (reqRel) {
-        data.RequestRelation = reqRel;
-    }
-    if (reqRelTar) {
-        data.RequestRelationTarget = reqRelTar;
+    if (reqType) {
+        data.RequestObjects = [];
+        let objArray = {};
+        objArray.RequestType = reqType;
+        objArray.Name = reqRel;
+        objArray.TargetUrl = reqRelTar;
+        data.RequestObjects.push(objArray);
     }
 
     return $.ajax({
