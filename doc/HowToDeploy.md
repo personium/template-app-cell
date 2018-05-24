@@ -19,7 +19,7 @@ You also need to mention that you want an app cell, too.
                   "bar_version": "1",
                   "box_version": "1",
                   "DefaultPath": "NotImplemented",
-                  "schema": "https://demo.personium.io/***/"
+                  "schema": "https://***/***/"
                 }
 
         - After (example):  
@@ -93,35 +93,26 @@ Unforntunately, the Cell Manager currently only support uploading one file at a 
 
 ## Deploying the Engine Script  
 1. Perform the following procedures to deploy the Engine Script.  
-    1. Fill in proper information in "getAppAuthToken.js".  
-    This is the Engine Script that gets App Authentication Token.  
+    1. Fill in proper information in the following section of "acc_info.js".  
+    This is the file that all other Engine Script refers to when authentication is needed.  
     Replace "*** with proper information.  
-    App developer should set the Engine Service to all exec (not all read) to avoid showing the ID/Password in this file.  
-        - App's URL info (Before)  
+    App developer should set the Engine Service to all exec (not all read) to avoid showing the ID/Password in this file. 
 
-                    var rootUrl = "***";
-                    var appCellName = "***";
-
-        - App's URL info (After)  
-
-                    var rootUrl = "https://demo.personium.io";
-                    var appCellName = "app-minimal";
-
-        - App's authentication info (Before)  
-
-                    "userId": "***",
-                    "password": "***"
-
-        - App's authentication info (After)  
-        Sample account ID is "john" and password is "doe".  
-
-                    "userId": "john",
-                    "password": "doe" 
+            /*
+             * Begin of your Personium app configurations
+             */
+            var rootUrl = '***'; // for example: https://demo.personium.io
+            var appCellName = '***'; // for example: app-minimal
+            var appUserId = '***';
+            var appUserPass = '***';
+            /*
+             * End of your Personium app configurations
+             */
 
     1. Create a Service (unitService) under the "html" folder.  
     ![Create a Service](CreateServiceDialog.png)  
-    1. Upload the following file to the newly created Service's __src folder.  
-        - src/html/Engine/getAppAuthToken.js    
+    1. Upload all the files to the newly created Service's __src folder.  
+        - src/html/Engine/*.js    
         ![Service folder](ServiceFolderFileUpload.png)  
     1. Configure the access permission for the Service.  
         1. Move back up inside the main box.  
@@ -137,6 +128,9 @@ Unforntunately, the Cell Manager currently only support uploading one file at a 
         1. Click the Register button.  
         The following is the expected result.  
         ![Service path registered](ServiceConfigurationDialog02.png)  
+        1. Repeat the same procedures to assign the Service path for the followings.  
+            1. start_oauth2 -> start_oauth2.js
+            1. receive_redirect -> receive_redirect.js
         1. Close the dialog  
 
     1. Verify the configuration.  
