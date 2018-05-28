@@ -2,12 +2,15 @@ exports.personium = (function() {
     var personium = personium || {};
     var _allowedKeys = [];
     var _requiredKeys = [];
-    var _appCellAdminInfo = {
-        cellUrl : "***",
-        userId : "***",
-        password: "***" 
-    };
+    
     var _ = require("underscore")._;
+    var accInfo = require("acc_info").accInfo;
+    var _appCellAdminInfo = accInfo.APP_CELL_ADMIN_INFO;
+    var _refererList = [accInfo.APP_CELL_URL];
+
+    personium.getAppCellUrl = function() {
+        return accInfo.APP_CELL_URL;
+    };
 
     personium.setAppCellAdminInfo = function(tempInfo) {
         _appCellAdminInfo = tempInfo;
@@ -22,6 +25,26 @@ exports.personium = (function() {
         var appCell = _p.as(_appCellAdminInfo).cell(p_target);
         ret = appCell.getToken();
         return ret;
+    };
+
+    personium.getAppAuthUserToken = function(query, token) {
+        var cellUrl = query.cellUrl;
+        var url = [
+            cellUrl,
+            "__token"
+        ].join("");
+        var headers = {
+            "Accept": "application/json",
+        };
+        var contentType = "text/plain";
+        var body = [
+            "grant_type=authorization_code",
+            "code=" + query.code,
+            "client_id=" + personium.getAppCellUrl(),
+            "client_secret=" + token
+        ].join('&');
+        
+        return personium.httpPOSTMethod(url, headers, contentType, body);
     };
 
     personium.getUserCell = function(accInfo, cellname) {
@@ -50,10 +73,49 @@ exports.personium = (function() {
         }
     };
 
+    personium.verifyOrigin = function(request) {
+        var refererUrl = request["headers"]["referer"];
+        /*
+         * Usually only your App's URL is enough.
+         * However, if you can allow other Apps to call your function to get Authentication Token.
+         */
+        var refererUrlList = _refererList;
+        var urlAllowed = false;
+        for (i = 0; i < refererUrlList.length; i++) {
+            if (refererUrl && refererUrl.indexOf(refererUrlList[i]) == 0) {
+                urlAllowed = true;
+                break;
+            }
+        }
+        if (!urlAllowed) {
+            var err = [
+                "io.personium.client.DaoException: 400,",
+                JSON.stringify({
+                    //"code": "400",
+                    "message": {
+                        "lang": "en",
+                        "value": "Cross-domain request not allowed."
+                    }
+                })
+            ].join("");
+            throw new _p.PersoniumException(err);
+        }
+    };
+
     personium.parseQuery = function(request) {
         var queryString = request.queryString;
         var query = _p.util.queryParse(queryString);
         return query;
+    };
+
+    personium.parseBodyAsJSON = function(request) {
+        var bodyAsString = personium.parseBody(request);
+        return JSON.parse(bodyAsString);
+    };
+
+    personium.parseBodyAsQuery = function(request) {
+        var bodyAsString = personium.parseBody(request);
+        return _p.util.queryParse(bodyAsString);
     };
 
     personium.parseBody = function(request) {
@@ -71,7 +133,7 @@ exports.personium = (function() {
             ].join("");
             throw new _p.PersoniumException(err);
         }
-        return JSON.parse(bodyAsString);
+        return bodyAsString;
     };
     
     personium.setAllowedKeys = function(tempArray) {
