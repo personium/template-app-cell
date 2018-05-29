@@ -43,8 +43,9 @@ exports.personium = (function() {
             "client_id=" + personium.getAppCellUrl(),
             "client_secret=" + token
         ].join('&');
+        var httpCodeExpected = 200;
         
-        return personium.httpPOSTMethod(url, headers, contentType, body);
+        return personium.httpPOSTMethod(url, headers, contentType, body, httpCodeExpected);
     };
 
     personium.getUserCell = function(accInfo, cellname) {
@@ -165,7 +166,7 @@ exports.personium = (function() {
             var hasRequiredInfo = _.every(
                 _requiredKeys,
                 function(element, index, list){
-                    return _.has(params, element) && !_.isUndefined(params[element]) && params[element] !== "undefined" && !_.isNull(params[element]);
+                    return _.has(params, element) && !_.isEmpty(params[element]) && params[element] !== "undefined";
                 }
             );
             
@@ -201,7 +202,7 @@ exports.personium = (function() {
         }
     };
 
-    personium.httpPOSTMethod = function (url, headers, contentType, body) {
+    personium.httpPOSTMethod = function (url, headers, contentType, body, httpCodeExpected) {
         var httpClient = new _p.extension.HttpClient();
         var response = httpClient.post(url, headers, contentType, body);
         var httpCode = parseInt(response.status);
@@ -212,7 +213,7 @@ exports.personium = (function() {
             response = httpClient.post(url, headers, contentType, body);
             httpCode = parseInt(response.status);
         }
-        if (httpCode !== 200) {
+        if (httpCode !== httpCodeExpected) {
             // Personium exception
             var err = [
                 "io.personium.client.DaoException: ",

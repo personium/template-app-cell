@@ -5,13 +5,10 @@ function(request){
         personium.verifyOrigin(request);
         
         var params = personium.parseQuery(request);
-        if (!params.cellUrl) {
-            return {
-                status : 400,
-                headers : {"Content-Type":"application/json"},
-                body: [JSON.stringify({"code": "400", "message": "Required paramter [cellUrl] missing."})]
-            };
-        }
+        // verify parameter information
+        personium.setAllowedKeys(['cellUrl']);
+        personium.setRequiredKeys(['cellUrl']);
+        personium.validateKeys(params);
 
         var state = [moment().valueOf(), "-per"].join('');
         var setCookieStr = createCookie(state);

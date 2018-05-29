@@ -6,14 +6,11 @@ function(request){
         personium.verifyOrigin(request);
 
         var params = personium.parseBodyAsQuery(request);
+        // verify parameter information
+        personium.setAllowedKeys(['p_target']);
+        personium.setRequiredKeys(['p_target']);
+        personium.validateKeys(params);
 
-        if (!params.p_target) {
-            return {
-                status : 400,
-                headers : {"Content-Type":"application/json"},
-                body: [JSON.stringify({"code": "400", "message": "Required paramter [p_target] missing."})]
-            };
-        }
         var appToken = personium.getAppToken(params.p_target);
         return personium.createResponse(200, appToken);
     } catch (e) {
