@@ -1,6 +1,9 @@
 // Login
 function(request){
     try {
+        personium.validateRequestMethod(["GET"], request);
+        personium.verifyOrigin(request);
+        
         var query = personium.parseQuery(request);
 
         // verify query information
@@ -11,12 +14,9 @@ function(request){
         // cross-check cookie & state
         verifyState(request);
 
-        // prepare App admin info
-        personium.setAppCellAdminInfo(accInfo.APP_CELL_ADMIN_INFO);
-
         var cellUrl = query.cellUrl;
         var appToken = personium.getAppToken(cellUrl);
-        var token = getAppAuthUserToken(query, appToken.access_token);
+        var token = personium.getAppAuthUserToken(query, appToken.access_token);
 
         return personium.createResponse(200, token);
     } catch(e) {
@@ -64,27 +64,6 @@ function getStateFromCookie(request) {
     }
 };
 
-function getAppAuthUserToken(query, token) {
-    var cellUrl = query.cellUrl;
-    var url = [
-        cellUrl,
-        "__token"
-    ].join("");
-    var headers = {
-        "Accept": "application/json",
-    };
-    var contentType = "text/plain";
-    var body = [
-        "grant_type=authorization_code",
-        "code=" + query.code,
-        "client_id=" + accInfo.APP_CELL_URL,
-        "client_secret=" + token
-    ].join('&');
-    
-    return personium.httpPOSTMethod(url, headers, contentType, body);
-};
-
-var accInfo = require("acc_info").accInfo;
 var personium = require("personium").personium;
 var jsSHA = require("sha_dev2").jsSHA;
 var moment = require("moment").moment;

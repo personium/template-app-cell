@@ -414,10 +414,12 @@ Common.refreshToken = function(callback) {
             if ((typeof callback !== "undefined") && $.isFunction(callback)) {
                 callback();
             };
-        }).fail(function(appCellToken) {
+        }).fail(function(error) {
+            console.log(error.responseJSON);
             Common.showIrrecoverableErrorDialog("msg.error.failedToRefreshToken");
         });
-    }).fail(function(appToken) {
+    }).fail(function(error) {
+        console.log(error.responseJSON);
         Common.showIrrecoverableErrorDialog("msg.error.failedToRefreshToken");
     });
 };

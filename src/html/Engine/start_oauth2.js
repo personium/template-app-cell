@@ -1,14 +1,14 @@
 // Login
 function(request){
     try {
+        personium.validateRequestMethod(["POST"], request);
+        personium.verifyOrigin(request);
+        
         var params = personium.parseQuery(request);
-        if (!params.cellUrl) {
-            return {
-                status : 400,
-                headers : {"Content-Type":"application/json"},
-                body: [JSON.stringify({"code": "400", "message": "Required paramter [cellUrl] missing."})]
-            };
-        }
+        // verify parameter information
+        personium.setAllowedKeys(['cellUrl']);
+        personium.setRequiredKeys(['cellUrl']);
+        personium.validateKeys(params);
 
         var state = [moment().valueOf(), "-per"].join('');
         var setCookieStr = createCookie(state);
@@ -36,7 +36,7 @@ function createCookie(state) {
 };
 
 function getRedirectUrl(cellUrl, state) {
-    var appCellUrl = accInfo.APP_CELL_URL;
+    var appCellUrl = personium.getAppCellUrl();
     var redirectUri = appCellUrl + '__/html/Engine/receive_redirect?cellUrl=' + cellUrl;
     var paramsStr = [
         'response_type=code',
@@ -48,7 +48,6 @@ function getRedirectUrl(cellUrl, state) {
     return [cellUrl, "__authz?", paramsStr].join('');
 };
 
-var accInfo = require("acc_info").accInfo;
 var personium = require("personium").personium;
 var jsSHA = require("sha_dev2").jsSHA;
 var moment = require("moment").moment;
