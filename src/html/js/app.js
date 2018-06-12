@@ -1,11 +1,11 @@
-const APP_URL = "https://***/***/";
+const APP_URL = "https://demo.personium.io/app-minimal/";
 
 getEngineEndPoint = function() {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
 };
 
 getStartOAuth2EngineEndPoint = function() {
-    return Common.getAppCellUrl() + "__/html/Engine/start_oauth2";
+    return Common.getAppCellUrl() + "__/html/Engine/start_personium_oauth2";
 };
 
 getNamesapces = function() {
