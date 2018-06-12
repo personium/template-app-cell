@@ -129,7 +129,7 @@ Unforntunately, the Cell Manager currently only support uploading one file at a 
         The following is the expected result.  
         ![Service path registered](ServiceConfigurationDialog02.png)  
         1. Repeat the same procedures to assign the Service path for the followings.  
-            1. start_oauth2 -> start_oauth2.js
+            1. start_personium_oauth2 -> start_personium_oauth2.js
             1. receive_redirect -> receive_redirect.js
         1. Close the dialog  
 
