@@ -7,12 +7,7 @@ All you need to do is import it to your project and start filling in the missing
 
     │  launch.json *
     │  profile.json *
-    │  roles.json *
     │  
-    ├─bar
-    │  └─00_meta
-    │          00_manifest.json *
-    │          90_rootprops.xml *
     │      
     ├─locales
     │  ├─en
@@ -23,7 +18,6 @@ All you need to do is import it to your project and start filling in the missing
     │          
     └─src
         └─html
-            │  app.html *
             │  
             ├─Engine
             │      acc_info.js *
@@ -47,3 +41,14 @@ Take a look at the guide on [How to Install](doc/HowToInstallApp.md) the minimal
 # Tips  
 Some [tips](doc/Tips.md) on using i18next & Google API.    
 
+# notes
+
+1. Create an App Cell.  
+1. From Snapshot menu, Upload and then Import the ZIP file.  
+1. Re-login  
+1. Modify the schema url of app.  
+1. export the box.  
+1. upload the app.bar to main box.  
+1. modify launch.json
+1. Modify acc_info.js
+1. Modify app.js
