@@ -2,8 +2,12 @@
 function(request){
     try {
         personium.validateRequestMethod(["POST"], request);
-    
-        personium.verifyOrigin(request);
+        
+        /*
+         * Uncomment the following line when you finish debugging your App
+         * and ready for release.
+         */
+        //personium.verifyOrigin(request);
 
         var params = personium.parseBodyAsQuery(request);
         // verify parameter information

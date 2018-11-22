@@ -5,69 +5,43 @@ All you need to do is import it to your project and start filling in the missing
 
 # Folder structure  
 
-    │  app-minimal.bar
-    │  launch.json
-    │  profile.json
-    │  relations.json
-    │  roles.json
+    │  launch.json *
+    │  profile.json *
+    │  roles.json *
     │  
     ├─bar
     │  └─00_meta
-    │          00_manifest.json
-    │          90_rootprops.xml
-    │          
-    ├─doc
-    │      
-    ├─icon
+    │          00_manifest.json *
+    │          90_rootprops.xml *
     │      
     ├─locales
     │  ├─en
-    │  │      profile.json
+    │  │      profile.json *
     │  │      
     │  └─ja
-    │          profile.json
+    │         profile.json *
     │          
     └─src
         └─html
-            │  app.html
+            │  app.html *
             │  
-            ├─css
-            │      common.css
-            │      
             ├─Engine
-            │      acc_info.js
-            │      getAppAuthToken.js
-            │      moment.js
-            │      personium.js
-            │      receive_redirect.js
-            │      sha_dev2.js
-            │      start_personium_oauth2.js
-            │      underscore.js
+            │      acc_info.js *
             │      
-            ├─img
-            │      github.png
-            │      
-            ├─js
-            │      app.js
-            │      common.js
-            │      common_personium.js
-            │      
-            └─locales
-                ├─en
-                │      common.json
-                │      glossary.json
-                │      
-                └─ja
-                        common.json
-                        glossary.json
+            └─js
+                   app.js *
 
-# How to deploy  
+
+
+# Tutorial  
+Follow the steps below to create, customize and install your first Personium App.Then, experience
+1. How to deploy  
 Take a look at the guide on [How to deploy](doc/HowToDeploy.md) the minimal App.  
 
-# How to customize the App  
+1. How to customize the App  
 Fell free to use this App as the base and write your own App. Basically, you can reuse files that contain "common" in their file names. Check [here](doc/Customizations.md) for detailed instructions.  
 
-# How to Install the App  
+1. How to Install the App  
 Take a look at the guide on [How to Install](doc/HowToInstallApp.md) the minimal App.
 
 # Tips  
