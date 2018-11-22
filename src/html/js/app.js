@@ -13,7 +13,7 @@ getNamesapces = function() {
 };
 
 additionalCallback = function() {
-    Common.setIdleTime();
+    Common.setRefreshTimer();
 
     Common.getProfileName(Common.getCellUrl(), displayMyDisplayName);
 };
