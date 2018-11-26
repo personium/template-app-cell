@@ -1,54 +1,45 @@
 # Description  
-This repository contains the necessary files (HTML, CSS, JavaScript) needed to create a very simple Personium App which runs on the HomeApp.
+This repository contains the necessary files (HTML, CSS, JavaScript) needed to create a very simple Personium app which can be launched from the HomeApp.
 
-All you need to do is import it to your project and start filling in the missing information marked by "***" within this repository.  
+All you need to do is follow the instructions in the tutorial to configure your app Cell and upload the files (see below) that contain appropriate information (information marked by "***" within this repository)of your app Cell.  
 
-# Folder structure  
+# Files to be modified and upload to your app Cell    
 
-    │  launch.json *
-    │  profile.json *
+    │  launch.json (must use the current app Cell URL)
+    │  profile.json (must use your App name and icon)
     │  
     │      
     ├─locales
     │  ├─en
-    │  │      profile.json *
+    │  │      profile.json  (must use your app name and icon)
     │  │      
     │  └─ja
-    │         profile.json *
+    │         profile.json  (must use your app name and icon)
     │          
     └─src
         └─html
             │  
             ├─Engine
-            │      acc_info.js *
+            │      acc_info.js (must use your app Cell's information)
             │      
             └─js
-                   app.js *
+                   app.js (must use the current App Cell URL)
 
 
 
 # Tutorial  
-Follow the steps below to create, customize and install your first Personium App.Then, experience
+Follow the steps below to create, customize and install your first Personium app.Then, experience
 1. How to deploy  
-Take a look at the guide on [How to deploy](doc/HowToDeploy.md) the minimal App.  
+Take a look at the guide on [How to deploy](doc/HowToDeploy.md) the minimal app.  
 
-1. How to customize the App  
-Fell free to use this App as the base and write your own App. Basically, you can reuse files that contain "common" in their file names. Check [here](doc/Customizations.md) for detailed instructions.  
+1. How to customize the app  
+Feel free to use this app as the base and write your own app. Basically, you can reuse files that contain "common" in their file names. Check [here](doc/Customizations.md) for detailed instructions.  
 
-1. How to Install the App  
-Take a look at the guide on [How to Install](doc/HowToInstallApp.md) the minimal App.
+1. How to Install the app  
+Take a look at the guide on [How to Install](doc/HowToInstallApp.md) the Minimal App.
+
+1. How to debug the app  
+Install Restlet Client in Chrome and import the [scenario](doc/Personium_Mokumoku3.json). Fill in your app Cell information in Environment variables.  
 
 # Tips  
 Some [tips](doc/Tips.md) on using i18next & Google API.    
-
-# notes
-
-1. Create an App Cell.  
-1. From Snapshot menu, Upload and then Import the ZIP file.  
-1. Re-login  
-1. Modify the schema url of app.  
-1. export the box.  
-1. upload the app.bar to main box.  
-1. modify launch.json
-1. Modify acc_info.js
-1. Modify app.js
