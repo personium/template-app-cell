@@ -1,2 +1,6 @@
 {
+    "LogViewer": {
+        "DisplayName": "Log viewer",
+        "Description": "Has permission to view the log."
+    }
 }

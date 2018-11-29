@@ -1,0 +1,699 @@
+{
+  "front-version": "2.19.1",
+  "version": 3,
+  "nodes": [
+    {
+      "type": "Project",
+      "id": "0e4f2f49-7e08-4d6d-af1b-fb653895a9c7",
+      "lastModified": "2018-11-20T17:04:04.808+09:00",
+      "name": "Mokumoku"
+    },
+    {
+      "uriEditor": true,
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "grant_type",
+              "value": "password"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "username",
+              "value": "${\"Account Name Me\"}"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "password",
+              "value": "${\"Account Password Me\"}"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "p_cookie",
+              "value": "true"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true,
+        "textBodyEditorHeight": 209,
+        "textBody": "grant_type=password&username=${\"cell id\"}&password=${\"cell password\"}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "${\"Cell URL Me\"}__token",
+        "path": ""
+      },
+      "description": "Authenticate yourself to Personium Cell. Similar to logging in to HomeApp.",
+      "id": "4a369cc3-d586-4661-ba00-db8bc9f7522a",
+      "lastModified": "2018-11-20T10:36:00.127+09:00",
+      "name": "01 Get User Auth token",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "enabled": true,
+          "path": "code",
+          "value": "200"
+        }
+      ],
+      "metaInfo": {
+        "IS_FROM_HISTORY": "7fad1a8e-6732-4183-a7b3-7d2be695a5df"
+      },
+      "parentId": "0e4f2f49-7e08-4d6d-af1b-fb653895a9c7"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "p_target",
+              "value": "${\"Cell URL Me\"}"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true,
+        "textBody": ""
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "${\"App Cell URL\"}__",
+        "path": "/html/Engine/getAppAuthToken"
+      },
+      "description": "Authenticate yourself to the App.",
+      "id": "819daccb-5331-4317-a991-79dbe3e76761",
+      "lastModified": "2018-11-20T15:27:45.926+09:00",
+      "name": "02 Get App authentication token",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "0e4f2f49-7e08-4d6d-af1b-fb653895a9c7"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "grant_type",
+              "value": "refresh_token"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "refresh_token",
+              "value": "${\"Mokumoku\".\"01 Get User Auth token\".\"response\".\"body\".\"refresh_token\"}"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "client_id",
+              "value": "${\"App Cell URL\"}"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "client_secret",
+              "value": "${\"Mokumoku\".\"02 Get App authentication token\".\"response\".\"body\".\"access_token\"}"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true,
+        "textBody": ""
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "${\"Cell URL Me\"}__token",
+        "path": ""
+      },
+      "description": "Authenticate the App to access the Box (designated to the App) in your Cell. Using user Auth token's refresh token and App Auth token's access token.",
+      "id": "4ecb8033-dfed-4451-947f-cf6cac5c6c9b",
+      "lastModified": "2018-11-20T11:28:31.407+09:00",
+      "name": "03 Get protected Box access token",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "0e4f2f49-7e08-4d6d-af1b-fb653895a9c7"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded"
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": ""
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "${\"Cell URL Me\"}__box",
+        "path": ""
+      },
+      "description": "Just to show that the App can get the Box URL.",
+      "id": "dc42cb21-8dd3-465f-90f3-224c1ac636b3",
+      "lastModified": "2018-11-20T13:12:20.389+09:00",
+      "name": "04 Get User Box URL",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"Mokumoku\".\"03 Get protected Box access token\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {
+        "IS_FROM_HISTORY": null
+      },
+      "parentId": "0e4f2f49-7e08-4d6d-af1b-fb653895a9c7"
+    },
+    {
+      "uriEditor": true,
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded"
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": ""
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": [
+            {
+              "name": "$top",
+              "value": "30"
+            },
+            {
+              "name": "$orderby",
+              "value": "dtstart desc"
+            },
+            {
+              "encoded": true,
+              "name": "$filter",
+              "value": "startDate ge datetimeoffset'2018-02-06T00:00:00+09:00'"
+            }
+          ]
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "${\"Mokumoku\".\"04 Get User Box URL\".\"response\".\"body\".\"Url\"}test",
+        "path": "/log"
+      },
+      "description": "The App can get data from the designated Box in your Cell.",
+      "id": "e480cf33-74a1-4e8a-a696-a8f5d93100f1",
+      "lastModified": "2018-11-20T15:59:04.170+09:00",
+      "name": "045 Get list of logs",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"Mokumoku\".\"03 Get protected Box access token\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {
+        "IS_FROM_HISTORY": null
+      },
+      "parentId": "0e4f2f49-7e08-4d6d-af1b-fb653895a9c7"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "p_target",
+              "value": "${\"Cell URL Friend\"}"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true,
+        "textBody": ""
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "${\"App Cell URL\"}__",
+        "path": "/html/Engine/getAppAuthToken"
+      },
+      "description": "Authenticate your friend to the App on behave of your friend.",
+      "id": "46833ab6-67e2-40d2-a60d-84acabc9ce56",
+      "lastModified": "2018-11-20T15:28:48.634+09:00",
+      "name": "05 Get App authentication token (friend)",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "0e4f2f49-7e08-4d6d-af1b-fb653895a9c7"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "grant_type",
+              "value": "refresh_token"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "refresh_token",
+              "value": "${\"Mokumoku\".\"03 Get protected Box access token\".\"response\".\"body\".\"refresh_token\"}"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "p_target",
+              "value": "${\"Cell URL Friend\"}"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true,
+        "textBody": ""
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "${\"Cell URL Me\"}__token",
+        "path": ""
+      },
+      "description": "Authenticate yourself to your friend's Personium Cell.",
+      "id": "cb2962a9-296c-4ec9-be94-2e75224d9f82",
+      "lastModified": "2018-11-20T15:45:54.803+09:00",
+      "name": "06 Get Transcell token (friend)",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "0e4f2f49-7e08-4d6d-af1b-fb653895a9c7"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "grant_type",
+              "value": "urn:ietf:params:oauth:grant-type:saml2-bearer"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "assertion",
+              "value": "${\"Mokumoku\".\"06 Get Transcell token (friend)\".\"response\".\"body\".\"access_token\"}"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "client_id",
+              "value": "${\"App Cell URL\"}"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "client_secret",
+              "value": "${\"Mokumoku\".\"05 Get App authentication token (friend)\".\"response\".\"body\".\"access_token\"}"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true,
+        "textBody": ""
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "${\"Cell URL Friend\"}__token",
+        "path": ""
+      },
+      "description": "Authenticate the App to access the Box (designated to the App) in your friend's Cell.",
+      "id": "a73fdf86-0db1-422e-b38e-777f9304893c",
+      "lastModified": "2018-11-20T15:48:22.793+09:00",
+      "name": "07 Get protected Box access token (friend)",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "0e4f2f49-7e08-4d6d-af1b-fb653895a9c7"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded"
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": ""
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "${\"Cell URL Friend\"}__box",
+        "path": ""
+      },
+      "description": "Just to show that the App can get the Box URL from your friend's Cell.",
+      "id": "de1cf460-ae7e-4955-ae7f-4c6bbe975e5e",
+      "lastModified": "2018-11-20T15:50:34.446+09:00",
+      "name": "08 Get Friend Box URL",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"Mokumoku\".\"07 Get protected Box access token (friend)\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {
+        "IS_FROM_HISTORY": null
+      },
+      "parentId": "0e4f2f49-7e08-4d6d-af1b-fb653895a9c7"
+    },
+    {
+      "uriEditor": true,
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded"
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": ""
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": [
+            {
+              "name": "$orderby",
+              "value": "dtstart desc"
+            },
+            {
+              "name": "$top",
+              "value": "10"
+            },
+            {
+              "name": "$filter",
+              "value": "startDate ge datetimeoffset'2018-02-06T00:00:00+09:00'"
+            },
+            {
+              "name": "$orderby",
+              "value": "__updated desc"
+            }
+          ]
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "${\"Mokumoku\".\"08 Get Friend Box URL\".\"response\".\"body\".\"Url\"}test",
+        "path": "/log"
+      },
+      "description": "The App can get data from the designated Box in your friend's Cell.",
+      "id": "3ad27b10-5dd3-4976-9fcf-a391e577d4ad",
+      "lastModified": "2018-11-20T17:04:04.808+09:00",
+      "name": "09 Get list of logs (friend)",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"Mokumoku\".\"07 Get protected Box access token (friend)\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {
+        "IS_FROM_HISTORY": null
+      },
+      "parentId": "0e4f2f49-7e08-4d6d-af1b-fb653895a9c7"
+    },
+    {
+      "type": "Context",
+      "id": "579e135c-b706-4fcb-b8a5-b8282bb3330d",
+      "lastModified": "2018-11-20T15:28:37.975+09:00",
+      "name": "Mokumoku-user1",
+      "variables": [
+        {
+          "enabled": true,
+          "name": "Cell URL Me",
+          "value": "https://demo.personium.io/***/"
+        },
+        {
+          "enabled": true,
+          "name": "Account Name Me",
+          "value": "***"
+        },
+        {
+          "enabled": true,
+          "name": "Account Password Me",
+          "value": "***"
+        },
+        {
+          "enabled": true,
+          "name": "App Cell URL",
+          "value": "https://demo.personium.io/app-***/"
+        },
+        {
+          "enabled": true,
+          "name": "Cell URL Friend",
+          "value": "https://demo.personium.io/***/"
+        }
+      ]
+    }
+  ]
+}

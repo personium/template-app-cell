@@ -1,75 +1,45 @@
 # Description  
-This repository contains the necessary files (HTML, CSS, JavaScript) needed to create a very simple Personium App which runs on the HomeApp.
+This repository contains the necessary files (HTML, CSS, JavaScript) needed to create a very simple Personium app which can be launched from the HomeApp.
 
-All you need to do is import it to your project and start filling in the missing information marked by "***" within this repository.  
+All you need to do is follow the instructions in the tutorial to configure your app Cell and upload the files (see below) that contain appropriate information (information marked by "***" within this repository)of your app Cell.  
 
-# Folder structure  
+# Files to be modified and upload to your app Cell    
 
-    │  app-minimal.bar
-    │  launch.json
-    │  profile.json
-    │  relations.json
-    │  roles.json
+    │  launch.json (must use the current app Cell URL)
+    │  profile.json (must use your App name and icon)
     │  
-    ├─bar
-    │  └─00_meta
-    │          00_manifest.json
-    │          90_rootprops.xml
-    │          
-    ├─doc
-    │      
-    ├─icon
     │      
     ├─locales
     │  ├─en
-    │  │      profile.json
+    │  │      profile.json  (must use your app name and icon)
     │  │      
     │  └─ja
-    │          profile.json
+    │         profile.json  (must use your app name and icon)
     │          
     └─src
         └─html
-            │  app.html
             │  
-            ├─css
-            │      common.css
-            │      
             ├─Engine
-            │      acc_info.js
-            │      getAppAuthToken.js
-            │      moment.js
-            │      personium.js
-            │      receive_redirect.js
-            │      sha_dev2.js
-            │      start_personium_oauth2.js
-            │      underscore.js
+            │      acc_info.js (must use your app Cell's information)
             │      
-            ├─img
-            │      github.png
-            │      
-            ├─js
-            │      app.js
-            │      common.js
-            │      common_personium.js
-            │      
-            └─locales
-                ├─en
-                │      common.json
-                │      glossary.json
-                │      
-                └─ja
-                        common.json
-                        glossary.json
+            └─js
+                   app.js (must use the current App Cell URL)
 
-# How to deploy  
-Take a look at the guide on [How to deploy](doc/HowToDeploy.md) the minimal App.  
 
-# How to customize the App  
-Fell free to use this App as the base and write your own App. Basically, you can reuse files that contain "common" in their file names. Check [here](doc/Customizations.md) for detailed instructions.  
 
-# How to Install the App  
-Take a look at the guide on [How to Install](doc/HowToInstallApp.md) the minimal App.
+# Tutorial  
+Follow the steps below to create, customize and install your first Personium app.Then, experience
+1. How to deploy  
+Take a look at the guide on [How to deploy](doc/HowToDeploy.md) the minimal app.  
+
+1. How to customize the app  
+Feel free to use this app as the base and write your own app. Basically, you can reuse files that contain "common" in their file names. Check [here](doc/Customizations.md) for detailed instructions.  
+
+1. How to Install the app  
+Take a look at the guide on [How to Install](doc/HowToInstallApp.md) the Minimal App.
+
+1. How to debug the app  
+Install Restlet Client in Chrome and import the [scenario](doc/Personium_Mokumoku3.json). Fill in your app Cell information in Environment variables.  
 
 # Tips  
 Some [tips](doc/Tips.md) on using i18next & Google API.    
-

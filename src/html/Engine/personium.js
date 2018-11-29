@@ -34,9 +34,9 @@ exports.personium = (function() {
             "__token"
         ].join("");
         var headers = {
-            "Accept": "application/json",
+            "Accept": "application/json"
         };
-        var contentType = "text/plain";
+        var contentType = "application/x-www-form-urlencoded";
         var body = [
             "grant_type=authorization_code",
             "code=" + query.code,

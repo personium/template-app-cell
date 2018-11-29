@@ -87,22 +87,31 @@ Common.dispAllowedCellList = function(json) {
             var uri = results[i].uri;
             var matchUrl = uri.match(/\(\'(.+)\'\)/);
             var extUrl = matchUrl[1];
-
-            Common.dispAllowedCellListAfter(extUrl, i);
+            
+            var url = Common.changeLocalUnitToUnitUrl(extUrl);
+            Common.dispAllowedCellListAfter(url, i);
         }
     }
 };
 
 Common.dispAllowedCellListAfter = function(extUrl, no) {
-    Common.getProfile(extUrl).done(function(data) {
-        var dispName = Common.getCellNameFromUrl(extUrl);
-        if (data !== null) {
-            dispName = data.DisplayName;
+    var dispName = "";
+    Common.getCell(extUrl).done(function(cellObj) {
+        dispName = cellObj.cell.name;
+    }).fail(function(xmlObj) {
+        if (xmlObj.status == "200") {
+            dispName = Common.getCellNameFromUrl(extUrl);
+        } else {
+            dispName = extUrl;
         }
-        Common.appendAllowedCellList(extUrl, dispName, no)
-    }).fail(function() {
-        var dispName = Common.getCellNameFromUrl(extUrl);
-        Common.appendAllowedCellList(extUrl, dispName, no)
+    }).always(function() {
+        Common.getProfile(extUrl).done(function(data) {
+            if (data !== null) {
+                dispName = data.DisplayName;
+            }
+        }).always(function() {
+            Common.appendAllowedCellList(extUrl, dispName, no)
+        });
     });
 };
 
@@ -129,13 +138,10 @@ Common.notAllowedCell = function(aDom) {
 };
 
 Common.deleteExtCellLinkRelation = function(extCell, relName) {
-    var urlArray = extCell.split("/");
-    var hProt = urlArray[0].substring(0, urlArray[0].length - 1);
-    var fqdn = urlArray[2];
-    var cellName = urlArray[3];
+    var cellUrlCnv = encodeURIComponent(extCell);
     return $.ajax({
         type: "DELETE",
-        url: Common.getCellUrl() + '__ctl/ExtCell(\'' + hProt + '%3A%2F%2F' + fqdn + '%2F' + cellName + '%2F\')/$links/_Role(Name=\'' + relName + '\',_Box.Name=\'' + Common.getBoxName() + '\')',
+        url: Common.getCellUrl() + '__ctl/ExtCell(\'' + cellUrlCnv + '\')/$links/_Role(Name=\'' + relName + '\',_Box.Name=\'' + Common.getBoxName() + '\')',
         headers: {
             'Authorization':'Bearer ' + Common.getToken()
         }
@@ -187,17 +193,26 @@ Common.dispOtherAllowedCells = function(extUrl) {
 };
 
 Common.getProfileName = function(extUrl, callback) {
-    let dispName = Common.getCellNameFromUrl(extUrl);
-
-    Common.getProfile(extUrl).done(function(data) {
-        if (data !== null) {
-            dispName = data.DisplayName;
+    let dispName = "";
+    Common.getCell(extUrl).done(function(cellObj) {
+        dispName = cellObj.cell.name;
+    }).fail(function(xmlObj) {
+        if (xmlObj.status == "200") {
+            dispName = Common.getCellNameFromUrl(extUrl);
+        } else {
+            dispName = extUrl;
         }
-    }).always(function(){
-        console.log(dispName);
-        if ((typeof callback !== "undefined") && $.isFunction(callback)) {
-            callback(extUrl, dispName);
-        }
+    }).always(function() {
+        Common.getProfile(extUrl).done(function(data) {
+            if (data !== null) {
+                dispName = data.DisplayName;
+            }
+        }).always(function(){
+            console.log(dispName);
+            if ((typeof callback !== "undefined") && $.isFunction(callback)) {
+                callback(extUrl, dispName);
+            }
+        });
     });
 };
 
@@ -274,7 +289,10 @@ Common.getTranscellToken = function(extCellUrl) {
             refresh_token: Common.getRefressToken(),
             p_target: extCellUrl
         },
-        headers: {'Accept':'application/json'}
+        headers: {
+            'Accept':'application/json',
+            'content-type': 'application/x-www-form-urlencoded'
+        }
     });
 };
 

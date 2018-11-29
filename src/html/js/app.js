@@ -1,4 +1,4 @@
-const APP_URL = "https://demo.personium.io/app-minimal/";
+const APP_URL = "https://demo.personium.io/***/";
 
 getEngineEndPoint = function() {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
@@ -13,7 +13,7 @@ getNamesapces = function() {
 };
 
 additionalCallback = function() {
-    Common.setIdleTime();
+    Common.setRefreshTimer();
 
     Common.getProfileName(Common.getCellUrl(), displayMyDisplayName);
 };

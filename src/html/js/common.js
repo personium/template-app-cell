@@ -22,12 +22,8 @@ var Common = Common || {};
 
 Common.PERSONIUM_LOCALUNIT = "personium-localunit:";
 
-//Default timeout limit - 60 minutes.
-Common.IDLE_TIMEOUT =  3600000;
-// 55 minutes
-Common.IDLE_CHECK = 3300000;
-// Records last activity time.
-Common.lastActivity = new Date().getTime();
+//Default timeout limit - 30 minutes.
+Common.REFRESH_TIMEOUT = 1800000;
 
 Common.accessData = {
     targetUrl: null,
@@ -40,6 +36,9 @@ Common.accessData = {
     expires: null,
     refExpires: null
 };
+
+Common.path_based_cellurl_enabled = true;
+Common.unitUrl = "";
 
 /*
  * The followings should be shared among applications and/or within the same application.
@@ -122,6 +121,12 @@ Common.setAppCellUrl = function() {
         Common.accessData.appUrl = _.first(appUrlSplit, 4).join("/") + "/"; 
     }
 
+    Common.getCell(Common.accessData.appUrl).fail(function(xmlObj) {
+        if (xmlObj.status !== "200") {
+            Common.accessData.appUrl = _.first(appUrlSplit, 3).join("/") + "/";
+        }
+    })
+
     return;
 };
 
@@ -144,6 +149,15 @@ Common.setAccessData = function() {
             break;
         }
     }
+
+    Common.getCell(Common.accessData.cellUrl).done(function(cellObj){
+        Common.unitUrl = cellObj.unit.url;
+        Common.path_based_cellurl_enabled = cellObj.unit.path_based_cellurl_enabled;
+    }).fail(function() {
+        let unitUrlSplit = Common.accessData.cellUrl.split("/");
+        Common.unitUrl = _.first(unitUrlSplit, 3).join("/") + "/";
+        Common.path_based_cellurl_enabled = true;
+    });
 };
 
 Common.getBoxUrlAPI = function(cellUrl, token) {
@@ -165,13 +179,23 @@ Common.getBoxUrlFromResponse = function(info) {
     return boxUrl;
 };
 
-Common.setInfo = function(url) {
-    var urlSplit = url.split("/");
-    Common.accessData.unitUrl = _.first(urlSplit, 3).join("/") + "/";
-    Common.accessData.cellUrl = _.first(urlSplit, 4).join("/") + "/";
-    Common.accessData.cellName = Common.getCellNameFromUrl(Common.accessData.cellUrl);
-    Common.setBoxUrl(url);
-    Common.accessData.boxName = _.last(_.compact(urlSplit));
+Common.setInfo = function(boxUrl) {
+    Common.setBoxUrl(boxUrl);
+    Common.getBox(boxUrl, Common.getToken()).done(function(boxObj) {
+        if (boxObj.box) {
+            Common.accessData.unitUrl = boxObj.unit.url;
+            Common.accessData.cellUrl = boxObj.cell.url;
+            Common.accessData.cellName = boxObj.cell.name;
+            Common.accessData.boxName = boxObj.box.name;
+        } else {
+            // In older version, URL is decomposed and created
+            var urlSplit = boxUrl.split("/");
+            Common.accessData.unitUrl = _.first(urlSplit, 3).join("/") + "/";
+            Common.accessData.cellUrl = _.first(urlSplit, 4).join("/") + "/";
+            Common.accessData.cellName = Common.getCellNameFromUrl(Common.accessData.cellUrl);
+            Common.accessData.boxName = _.last(_.compact(urlSplit));
+        }
+    });
 };
 
 Common.getUnitUrl = function() {
@@ -181,7 +205,19 @@ Common.getUnitUrl = function() {
 Common.changeLocalUnitToUnitUrl = function (cellUrl) {
     var result = cellUrl;
     if (cellUrl.startsWith(Common.PERSONIUM_LOCALUNIT)) {
-        result = cellUrl.replace(Common.PERSONIUM_LOCALUNIT + "/", Common.getUnitUrl());
+        if (!Common.path_based_cellurl_enabled) {
+            // https://cellname.fqdn/
+            let cellname = cellUrl.replace(Common.PERSONIUM_LOCALUNIT + "/", "");
+            if (cellname.endsWith("/")) {
+              cellname = cellname.substring(0, cellname.length-1);
+            }
+            let unitSplit = Common.unitUrl.split("/");
+            unitSplit[2] = cellname + "." + unitSplit[2];
+            result = unitSplit.join("/");
+        } else {
+            // https://fqdn/cellname/
+            result = cellUrl.replace(Common.PERSONIUM_LOCALUNIT + "/", Common.getUnitUrl());
+        }
     }
 
     return result;
@@ -286,19 +322,14 @@ Common.checkParam = function() {
 /*
  * Initialize info for idling check
  */
-Common.setIdleTime = function() {
-    // Create Session Expired Modal
-    Common.appendSessionExpiredDialog();
+Common.setRefreshTimer = function() {
+    // refresh token every 30 minutes
+    Common.checkRefreshTimer = setInterval(Common.refreshToken, Common.REFRESH_TIMEOUT);
+};
 
-    //Common.refreshToken();
-
-    // check 5 minutes before session expires (60minutes)
-    Common.checkIdleTimer = setInterval(Common.checkIdleTime, Common.IDLE_CHECK);
-
-    $(document).on('click mousemove keypress', function (event) {
-        Common.lastActivity = new Date().getTime();
-    });
-}
+Common.stopRefreshTimer = function() {
+    clearInterval(Common.checkRefreshTimer);
+};
 
 Common.appendSessionExpiredDialog = function() {
     // Session Expiration
@@ -455,7 +486,10 @@ Common.getProtectedBoxAccessToken = function(appToken, cellUrl) {
                     client_id: Common.getAppCellUrl(),
                     client_secret: appToken
                 },
-                headers: {'Accept':'application/json'}
+                headers: {
+                    'Accept':'application/json',
+                    'content-type': 'application/x-www-form-urlencoded'
+                }
             });
 };
 
@@ -506,29 +540,16 @@ Common.getProtectedBoxAccessToken4ExtCell = function(cellUrl, tcat, aaat) {
             client_id: Common.getAppCellUrl(),
             client_secret: aaat
         },
-        headers: {'Accept':'application/json'}
+        headers: {
+            'Accept':'application/json',
+            'content-type': 'application/x-www-form-urlencoded'
+        }
     });
 };
 
-/*
- * idling check 
- * Common.lastActivity + Common.accessData.expires * 1000
- */
-Common.checkIdleTime = function() {
-    if (new Date().getTime() > Common.lastActivity + Common.IDLE_TIMEOUT) {
-        Common.stopIdleTimer();
-        $('#modal-session-expired').modal('show');
-    } else {
-        Common.refreshToken();
-    }
-};
-
-Common.stopIdleTimer = function() {
-    clearInterval(Common.checkIdleTimer);
-    $(document).off('click mousemove keypress');
-};
-
 Common.showIrrecoverableErrorDialog = function(msg_key) {
+    Common.stopRefreshTimer();
+    
     // define your own handler for each App/screen
     if ((typeof irrecoverableErrorHandler !== "undefined") && $.isFunction(irrecoverableErrorHandler)) {
         irrecoverableErrorHandler();
@@ -549,4 +570,27 @@ Common.displayMessageByKey = function(msg_key) {
     } else {
         $('#dispMsg').hide();
     }
+};
+
+Common.getCell = function (cellUrl) {
+    if (!cellUrl) cellUrl = "https";
+
+    return $.ajax({
+        type: "GET",
+        url: cellUrl,
+        headers: {
+            'Accept': 'application/json'
+        }
+    });
+};
+
+Common.getBox = function (boxUrl, token) {
+    return $.ajax({
+        type: "GET",
+        url: boxUrl,
+        headers: {
+            'Authorization':'Bearer ' + token,
+            'Accept': 'application/json'
+        }
+    });
 };
