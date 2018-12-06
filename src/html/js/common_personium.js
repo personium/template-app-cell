@@ -88,14 +88,13 @@ Common.dispAllowedCellList = function(json) {
             var matchUrl = uri.match(/\(\'(.+)\'\)/);
             var extUrl = matchUrl[1];
             
-            var url = Common.changeLocalUnitToUnitUrl(extUrl);
-            Common.dispAllowedCellListAfter(url, i);
+            Common.dispAllowedCellListAfter(extUrl, i);
         }
     }
 };
 
 Common.dispAllowedCellListAfter = function(extUrl, no) {
-    var dispName = "";
+    let dispName = "";
     Common.getCell(extUrl).done(function(cellObj) {
         dispName = cellObj.cell.name;
     }).fail(function(xmlObj) {
@@ -112,7 +111,7 @@ Common.dispAllowedCellListAfter = function(extUrl, no) {
         }).always(function() {
             Common.appendAllowedCellList(extUrl, dispName, no)
         });
-    });
+    })
 };
 
 Common.getProfile = function(url) {
@@ -213,7 +212,7 @@ Common.getProfileName = function(extUrl, callback) {
                 callback(extUrl, dispName);
             }
         });
-    });
+    })
 };
 
 /*
