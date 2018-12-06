@@ -204,8 +204,15 @@ exports.personium = (function() {
 
     personium.httpPOSTMethod = function (url, headers, contentType, body, httpCodeExpected) {
         var httpClient = new _p.extension.HttpClient();
-        var response = httpClient.post(url, headers, contentType, body);
-        var httpCode = parseInt(response.status);
+        var response = null;
+        var httpCode;
+        try {
+            response = httpClient.post(url, headers, contentType, body);
+            httpCode = parseInt(response.status);
+        } catch(e) {
+            // Sometimes SSL certificate issue raises exception
+            httpCode = 500;
+        }
         if (httpCode === 500) {
             // retry
             var ignoreVerification = {"IgnoreHostnameVerification": true};

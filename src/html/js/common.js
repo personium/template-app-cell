@@ -62,43 +62,44 @@ $(document).ready(function() {
 
             Common.appendCommonDialog();
 
-            Common.setAppCellUrl();
+            Common.setAppCellUrl(function() {
 
-            Common.setAccessData();
+                Common.setAccessData();
 
-            if (!Common.checkParam()) {
-                // cannot do anything to recover
-                // display a dialog and close the app.
-                return;
-            };
+		        if (!Common.checkParam()) {
+		            // cannot do anything to recover
+		            // display a dialog and close the app.
+		            return;
+		        };
 
-            Common.startOAuth2(function(){
-                let cellUrl = Common.getCellUrl();
-                let token = Common.getToken();
-                Common.getBoxUrlAPI(cellUrl, token)
-                    .done(function(data, textStatus, request) {
-                        let tempInfo = {
-                            data: data,
-                            request: request,
-                            targetCellUrl: cellUrl
-                        };
-                        let boxUrl = Common.getBoxUrlFromResponse(tempInfo);
-                        console.log(boxUrl);
-                        Common.setInfo(boxUrl);
-                        // define your own additionalCallback for each App/screen
-                        if ((typeof additionalCallback !== "undefined") && $.isFunction(additionalCallback)) {
-                            additionalCallback();
-                        }
-                    })
-                    .fail(function(error) {
-                        console.log(error.responseJSON.code);
-                        console.log(error.responseJSON.message.value);
-                        Common.showIrrecoverableErrorDialog("msg.error.failedToGetBoxUrl");
-                    });
-            });
+		        Common.startOAuth2(function(){
+		            let cellUrl = Common.getCellUrl();
+		            let token = Common.getToken();
+		            Common.getBoxUrlAPI(cellUrl, token)
+		                .done(function(data, textStatus, request) {
+		                    let tempInfo = {
+		                        data: data,
+		                        request: request,
+		                        targetCellUrl: cellUrl
+		                    };
+		                    let boxUrl = Common.getBoxUrlFromResponse(tempInfo);
+		                    console.log(boxUrl);
+		                    Common.setInfo(boxUrl);
+		                    // define your own additionalCallback for each App/screen
+		                    if ((typeof additionalCallback !== "undefined") && $.isFunction(additionalCallback)) {
+		                        additionalCallback();
+		                    }
+		                })
+		                .fail(function(error) {
+		                    console.log(error.responseJSON.code);
+		                    console.log(error.responseJSON.message.value);
+		                    Common.showIrrecoverableErrorDialog("msg.error.failedToGetBoxUrl");
+		                });
+		        });
 
-            Common.updateContent();
-        });
+		        Common.updateContent();
+        	});
+    	});
 });
 
 /*
@@ -112,22 +113,28 @@ Common.initJqueryI18next = function() {
     });
 }
 
-Common.setAppCellUrl = function() {
+Common.setAppCellUrl = function(callback) {
     var appUrlSplit = _.first(location.href.split("#")).split("/");
 
     if (_.contains(appUrlSplit, "localhost") || _.contains(appUrlSplit, "file:")) {
         Common.accessData.appUrl = APP_URL; // APP_URL must be defined by each App
     } else {
-        Common.accessData.appUrl = _.first(appUrlSplit, 4).join("/") + "/"; 
+        Common.accessData.appUrl = _.first(appUrlSplit, 3).join("/") + "/"; 
     }
 
-    Common.getCell(Common.accessData.appUrl).fail(function(xmlObj) {
+    Common.getCell(Common.accessData.appUrl).done(function(cellObj) {
+        if (!cellObj.cell) {
+        Common.accessData.appUrl = _.first(appUrlSplit, 4).join("/") + "/"; 
+    }
+    }).fail(function(xmlObj) {
         if (xmlObj.status !== "200") {
-            Common.accessData.appUrl = _.first(appUrlSplit, 3).join("/") + "/";
+            Common.accessData.appUrl = _.first(appUrlSplit, 4).join("/") + "/";
+        }
+    }).always(function() {
+        if ((typeof callback !== "undefined") && $.isFunction(callback)) {
+            callback();
         }
     })
-
-    return;
 };
 
 Common.getAppCellUrl = function() {
@@ -152,12 +159,16 @@ Common.setAccessData = function() {
 
     Common.getCell(Common.accessData.cellUrl).done(function(cellObj){
         Common.unitUrl = cellObj.unit.url;
-        Common.path_based_cellurl_enabled = cellObj.unit.path_based_cellurl_enabled;
     }).fail(function() {
         let unitUrlSplit = Common.accessData.cellUrl.split("/");
         Common.unitUrl = _.first(unitUrlSplit, 3).join("/") + "/";
+    }).always(function() {
+        Common.getCell(Common.unitUrl).done(function(unitObj) {
+            Common.path_based_cellurl_enabled = unitObj.unit.path_based_cellurl_enabled;
+        }).fail(function() {
         Common.path_based_cellurl_enabled = true;
-    });
+        })
+    })
 };
 
 Common.getBoxUrlAPI = function(cellUrl, token) {
@@ -179,9 +190,9 @@ Common.getBoxUrlFromResponse = function(info) {
     return boxUrl;
 };
 
-Common.setInfo = function(boxUrl) {
-    Common.setBoxUrl(boxUrl);
-    Common.getBox(boxUrl, Common.getToken()).done(function(boxObj) {
+Common.setInfo = function(url) {
+    Common.setBoxUrl(url);
+    Common.getBox(url, Common.getToken()).done(function(boxObj) {
         if (boxObj.box) {
             Common.accessData.unitUrl = boxObj.unit.url;
             Common.accessData.cellUrl = boxObj.cell.url;
@@ -189,13 +200,15 @@ Common.setInfo = function(boxUrl) {
             Common.accessData.boxName = boxObj.box.name;
         } else {
             // In older version, URL is decomposed and created
-            var urlSplit = boxUrl.split("/");
+            var urlSplit = url.split("/");
             Common.accessData.unitUrl = _.first(urlSplit, 3).join("/") + "/";
             Common.accessData.cellUrl = _.first(urlSplit, 4).join("/") + "/";
             Common.accessData.cellName = Common.getCellNameFromUrl(Common.accessData.cellUrl);
             Common.accessData.boxName = _.last(_.compact(urlSplit));
         }
-    });
+    }).always(function() {
+        sessionStorage.setItem("Common.accessData", JSON.stringify(Common.accessData));
+    })
 };
 
 Common.getUnitUrl = function() {
