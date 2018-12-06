@@ -47,9 +47,8 @@ If your browser displays error message, ignore it and reload the page.
             /*
              * Begin of your Personium app configurations
              */
-            var rootUrl = '***'; // for example: https://demo.personium.io
-            var appCellName = '***'; // for example: app-minimal
-            var appUserId = '***';
+            var appCellUrl = '***'; // for example: https://demo.personium.io/appCellName/ or https://appCellName.demo.personium.io/
+            var appUserId = 'tokenAcc';
             var appUserPass = '***';
             /*
              * End of your Personium app configurations
