@@ -12,8 +12,8 @@ Download the [zip file](/app-minimal-clone.zip).
     - After  
     <a href='./step02-after.png' target='_blank'><img src="step02-after.png" alt="step 2-after" width="300"/></a>  
 1. From Snapshot menu, select the file and then click the "Import" button.   
-> You will be logged out automatically so that you will not be able to corrupt the Cell content.  
-> If your browser displays error message, ignore it and reload the page.  
+You will be logged out automatically so that you will not be able to corrupt the Cell content.  
+If your browser displays error message, ignore it and reload the page.  
     - Before:  
     <a href='./step03-before.png' target='_blank'><img src="step03-before.png" alt="step 3-before" width="300"/></a>  
     - Confirmation:   
