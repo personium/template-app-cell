@@ -117,15 +117,16 @@ Common.setAppCellUrl = function(callback) {
     var appUrlSplit = _.first(location.href.split("#")).split("/");
 
     if (_.contains(appUrlSplit, "localhost") || _.contains(appUrlSplit, "file:")) {
-        Common.accessData.appUrl = APP_URL; // APP_URL must be defined by each App
+        Common.showWarningDialog(null, function(){location.href = 'https://personium.io'});
+        return;
     } else {
         Common.accessData.appUrl = _.first(appUrlSplit, 3).join("/") + "/"; 
     }
 
     Common.getCell(Common.accessData.appUrl).done(function(cellObj) {
         if (!cellObj.cell) {
-        Common.accessData.appUrl = _.first(appUrlSplit, 4).join("/") + "/"; 
-    }
+            Common.accessData.appUrl = _.first(appUrlSplit, 4).join("/") + "/"; 
+        }
     }).fail(function(xmlObj) {
         if (xmlObj.status !== "200") {
             Common.accessData.appUrl = _.first(appUrlSplit, 4).join("/") + "/";
@@ -375,11 +376,11 @@ Common.appendCommonDialog = function() {
             '<div class="modal-dialog">',
                 '<div class="modal-content">',
                     '<div class="modal-header login-header">',
-                        '<h4 class="modal-title"></h4>',
+                        '<h4 class="modal-title">Terminating app ...</h4>',
                     '</div>',
-                    '<div class="modal-body"></div>',
+                    '<div class="modal-body">Failed to get this App\'s launching information. Please check API Reference.</div>',
                     '<div class="modal-footer">',
-                        '<button type="button" class="btn btn-primary" id="b-common-ok" data-i18n="sessionExpiredDialog.btnOk"></button>',
+                        '<button type="button" class="btn btn-primary" id="b-common-ok" data-i18n="sessionExpiredDialog.btnOk">OK</button>',
                     '</div>',
                '</div>',
            '</div>',

@@ -1,5 +1,3 @@
-const APP_URL = "https://demo.personium.io/***/";
-
 getEngineEndPoint = function() {
     return Common.getAppCellUrl() + "__/html/Engine/getAppAuthToken";
 };
