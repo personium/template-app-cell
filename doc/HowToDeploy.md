@@ -53,13 +53,3 @@ If your browser displays error message, ignore it and reload the page.
             /*
              * End of your Personium app configurations
              */
-
-    1. main/html/js/app.js  
-    Internal APIs in common.js or common_personium.js refers to the Cell URL to perform all sorts of operations.  
-        - Before:  
-
-                const APP_URL = "https://***/***/";
-
-        - After (example):  
-
-                const APP_URL = "https://demo.personium.io/app-minimal/";
