@@ -80,3 +80,19 @@ If your browser displays error message, ignore it and reload the page.
             /*
              * End of your Personium app configurations
              */
+
+    1. Perform the following to set the password (appUserPass) of 'tokenAcc' in your app Cell.  
+        1. From Account menu, click tokenAcc to display details.  
+            - Before  
+            <a href='./step10iii-before.png' target='_blank'><img src="step10iii-before.png" alt="step 10iii-before" width="300"/></a>  
+            
+            - After  
+            <a href='./step10iii-after.png' target='_blank'><img src="step10iii-after.png" alt="step 10iii-after" width="300"/></a>   
+
+        1. Modify the password by clicking the "Pencil" icon.  
+            - Before  
+            <a href='./step10iii-edit-before.png' target='_blank'><img src="step10iii-before.png" alt="step 10iii-before" width="300"/></a>  
+            
+            - Enter the password (appUserPass) specified in acc_info.js.    
+            <a href='./step10iii-edit.png' target='_blank'><img src="step10iii-edit.png" alt="step 10iii-edit" width="300"/></a>  
+ 
