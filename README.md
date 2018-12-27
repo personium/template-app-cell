@@ -19,11 +19,8 @@ All you need to do is follow the instructions in the tutorial to import configur
     └─src
         └─html
             │  
-            ├─Engine
-            │      acc_info.js (must use your app Cell's information)
-            │      
-            └─js
-                   app.js (must use the current App Cell URL)
+            └─Engine
+                   acc_info.js (must use your app Cell's information)
 
 
 # Before you start  
@@ -55,5 +52,9 @@ Take a look at the guide on [How to Install](doc/HowToInstallApp.md) the Minimal
 1. How to debug the app  
 Install Restlet Client in Chrome and import the [scenario](doc/Personium_Mokumoku3.json). Fill in your app Cell information in Environment variables.  
 
+# Coming soon  
+Currently we only have resources to create web application version of Personium app.  
+When time permits, we will have iOs and Android versions.  
+ 
 # Tips  
 Some [tips](doc/Tips.md) on using i18next & Google API.    
