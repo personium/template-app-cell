@@ -6,7 +6,7 @@ Download the [zip file](/app-minimal-clone.zip).
 ## Deploying the files  
 1. Use Cell Manager to access your app Cell.  
 <a href='./step01.png' target='_blank'><img src="step01.png" alt="step 1" width="300"/></a>  
-1. From Snapshot menu, click the "Upload" button and  the [zip file](/app-minimal-clone.zip).  
+1. From Snapshot menu, click the "Upload" button, select the previous downloaded zip file to upload.  
     - Before  
     <a href='./step02-before.png' target='_blank'><img src="step02-before.png" alt="step 2-before" width="300"/></a>  
     - After  
