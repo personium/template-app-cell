@@ -51,6 +51,8 @@ Take a look at the guide on [How to Install](doc/HowToInstallApp.md) the Minimal
 
 1. How to debug the app  
 Install Restlet Client in Chrome and import the [scenario](doc/Personium_Mokumoku3.json). Fill in your app Cell information in Environment variables.  
+> At first, the part getting your friend's data will fail because required permission is not assigned to you.
+> Ask you friend to install the Minimal App and perform [How to add member and assign permission](doc/HowToAddMemberAndAssignPermission.md).
 
 # Coming soon  
 Currently we only have resources to create web application version of Personium app.  
